@@ -1,0 +1,6 @@
+# databasedotcom.yml
+#
+---
+
+client_secret: bro
+client_id: baz

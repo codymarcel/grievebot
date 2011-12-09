@@ -1,4 +1,9 @@
 Grievebot::Application.routes.draw do
+  
+  get "chatter_feed/index"
+  
+  match 'chatter_feed/feed' => 'chatter_feed#get_chatter_feed'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -12,7 +17,9 @@ Grievebot::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-
+   
+  #resources :chatter_feed
+    
   # Sample resource route with options:
   #   resources :products do
   #     member do
@@ -46,9 +53,10 @@ Grievebot::Application.routes.draw do
   #     resources :products
   #   end
 
+  
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'chatter_feed#index'
 
   # See how all your routes lay out with "rake routes"
 
