@@ -15,6 +15,7 @@ class SensorAdapter
       '&client_secret='+ENV['SALESFORCE_OAUTH2_SECRET']+
       '&username='+ENV['SALESFORCE_OAUTH2_USERNAME']+
       '&password='+ENV['SALESFORCE_OAUTH2_PASSWORD']
+    puts base_auth_query.to_yaml
     @@authResults = post(base_uri, { :body => base_auth_query })
     puts @@authResults.to_yaml
     return @@authResults
