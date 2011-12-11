@@ -3,6 +3,8 @@ Grievebot::Application.routes.draw do
   get "chatter_feed/index"
   
   match 'chatter_feed/feed' => 'chatter_feed#get_chatter_feed'
+  
+  resources :output
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

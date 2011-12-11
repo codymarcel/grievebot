@@ -46,6 +46,9 @@ GEM
     execjs (1.2.9)
       multi_json (~> 1.0)
     hike (1.2.1)
+    httparty (0.8.1)
+      multi_json
+      multi_xml
     i18n (0.6.0)
     jquery-rails (1.0.19)
       railties (~> 3.0)
@@ -57,6 +60,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.17.2)
     multi_json (1.0.4)
+    multi_xml (0.4.1)
     multipart-post (1.1.4)
     polyglot (0.3.3)
     rack (1.3.5)
@@ -117,6 +121,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.1.1)
   databasedotcom (~> 1.2.5)
+  httparty
   jquery-rails
   rails (= 3.1.3)
   sass-rails (~> 3.1.5)

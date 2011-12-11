@@ -8,11 +8,6 @@ class SensorAdapter
   
   format :json
 
-  #utility
-  def self.set_headers
-    headers 'Authorization' => "OAuth #{ENV['sfdc_token']}"
-  end
-  
   #authenticate
   def self.authenticate
     base_uri = ENV['SALESFORCE_OAUTH2_URI']
@@ -21,7 +16,25 @@ class SensorAdapter
       '&username='+ENV['SALESFORCE_OAUTH2_USERNAME']+
       '&password='+ENV['SALESFORCE_OAUTH2_PASSWORD']
     @authResults = post(base_uri, { :body => base_auth_query })
-    puts "xxxxxxxx ", @authResults
+    puts @authResults.to_yaml
+    return @authResults
+  end
+
+  def self.api_query(query_stuff)
+    if !@authResults
+      SensorAdapter.authenticate
+    end
+   
+    headers 'Authorization' => 'OAuth ' + @authResults["access_token"]
+    headers 'Content-Type' => 'application/json'
+    reading_uri = @authResults["instance_url"] + '/services/data/v23.0/' + query_stuff
+    
+    puts "Querying: " + reading_uri
+    
+    ret = HTTParty.get(reading_uri)
+    
+    return ret
+    
   end
 
   #update my own personal status
@@ -31,8 +44,8 @@ class SensorAdapter
     end
     
     #now put to readings
-    headers 'Authorization' => "OAuth " + @authResults["access_token"]
-    headers "Content-Type" => "application/json"
+    headers 'Authorization' => 'OAuth ' + @authResults["access_token"]
+    headers 'Content-Type' => 'application/json'
     reading_uri = 'https://na1.salesforce.com/services/data/v20.0/sobjects/Reading__c/'
     
     newReading = '{ "Device__c" : "'+device +'", "Measure__c" : "' + measure + '", "Value__c" : "'+reading+'" }'
