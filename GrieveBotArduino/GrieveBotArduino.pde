@@ -1,122 +1,95 @@
-//  Copyright (C) 2010 Georg Kaindl
-//  http://gkaindl.com
-//
-//  This file is part of Arduino EthernetDNS.
-//
-//  EthernetDNS is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU Lesser General Public License as
-//  published by the Free Software Foundation, either version 3 of
-//  the License, or (at your option) any later version.
-//
-//  EthernetDNS is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with EthernetDNS. If not, see
-//  <http://www.gnu.org/licenses/>.
-//
 
-//  Illustrates how to do non-blocking DNS queries via polling.
-
-#if defined(ARDUINO) && ARDUINO > 18
+//Soft serial library used to send serial commands on pin 2 instead of regular serial pin.
+#include <SoftwareSerial.h>
 #include <SPI.h>
-#endif
-#include "dns.h"
 #include <Ethernet.h>
-#include <EthernetDNS.h>
+#include <EthernetDHCP.h>
+#include "dns.h"
+#include "speak.h"
 
-const char* ip_to_str(const uint8_t*);
 
+int wt = 5000;
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte ip[] = { 192, 168, 0, 134 };
+byte server[] = { 74,125,224,115 }; // Google
+Client client(server, 80);
 
-// substitute an address on your own network here
-byte ip[] = { 192, 168, 0, 250 };
-// substitute your DNS server ip address
-byte dnsServerIp[] = { 192, 168, 0, 1};
 
-// NOTE: Alternatively, you can use the EthernetDHCP library to configure your
-//       Ethernet shield and find out the DNS server IP address.
+//Create a message buffer to hold the ascii message to be converted to sound
+char message[128]="Number 5 is al i ve!";
 
 void setup()
 {
-  Ethernet.begin(mac, ip);
-  
+
+
+  //Set up a serial port to get the ascii message from the host
   Serial.begin(9600);
-  Serial.println("Enter a host name via the Arduino Serial Monitor to have it "
-                 "resolved.");
+  delay(20000);
   
-  // You will often want to set your own DNS server IP address (that is
-  // reachable from your Arduino board) before doing any DNS queries. Per
-  // default, the DNS server IP is set to one of Google's public DNS servers.
-  EthernetDNS.setDNSServer(dnsServerIp);
+  Serial.println("Attempting to obtain a DHCP lease...");
+  
+  // Initiate a DHCP session. The argument is the MAC (hardware) address that
+  // you want your Ethernet shield to use. This call will block until a DHCP
+  // lease has been obtained. The request will be periodically resent until
+  // a lease is granted, but if there is no DHCP server on the network or if
+  // the server fails to respond, this call will block forever.
+  // Thus, you can alternatively use polling mode to check whether a DHCP
+  // lease has been obtained, so that you can react if the server does not
+  // respond (see the PollingDHCP example).
+  EthernetDHCP.begin(mac);
+
+  // Since we're here, it means that we now have a DHCP lease, so we print
+  // out some information.
+  const byte* ipAddr = EthernetDHCP.ipAddress();
+  const byte* gatewayAddr = EthernetDHCP.gatewayIpAddress();
+  const byte* dnsAddr = EthernetDHCP.dnsIpAddress();
+
+  
+  speakjet_init();
+
+  speak(message);  
+  speak("A  D H C P lease has been obtained.");
+  speak("My I P is ");
+  speak(ip_to_str(ipAddr));
+
+
+/*
+  if (client.connect()) {
+    Serial.println("connected");
+    // Make a HTTP request:
+    client.println("GET /search?q=arduino HTTP/1.0");
+    client.println();
+  } 
+  else {
+    // kf you didn't get a connection to the server:
+    Serial.println("connection failed");
+  }
+*/  
 }
 
 void loop()
-{ 
-  char hostName[512];
-  int length = 0;
-  
-  while (Serial.available()) {
-    hostName[length] = Serial.read();
-    length = (length+1) % 512;
-    delay(50);
+{
+
+/*
+  if (client.available()) {
+    //Serial.println("connected");
+    char c = client.read();
+    Serial.print(c);
   }
-  hostName[length] = '\0';
-  
-  if (length > 0) {
-    
-    byte ipAddr[4];
-    
-    Serial.print("Resolving ");
-    Serial.print(hostName);
-    Serial.print("...");
-    
-    // Let's send our DNS query. If anything other than DNSSuccess is returned,
-    // an error has occurred. A full list of possible return values is
-    // available in EthernetDNS.h
-    DNSError err = EthernetDNS.sendDNSQuery(hostName);
 
-    if (DNSSuccess == err) {
-      do {
-        // This will not wait for a reply, but return immediately if no reply
-        // is available yet. In this case, the return value is DNSTryLater.
-        // We can use this behavior to go on with our sketch while the DNS
-        // server and network are busy finishing our request, rather than
-        // being blocked and waiting.
-        err = EthernetDNS.pollDNSReply(ipAddr);
-			
-        if (DNSTryLater == err) {
-          // You could do real stuff here, or go on with a your loop(). I'm
-          // just printing some dots to signal that the query is being
-          // processed.
-          delay(20);
-          Serial.print(".");
-        }
-      } while (DNSTryLater == err);
-    }
-
+  if (!client.connected()) {
     Serial.println();
-
-    // Finally, we have a result. We're just handling the most common errors
-    // here (success, timed out, not found) and just print others as an
-    // integer. A full listing of possible errors codes is available in
-    // EthernetDNS.h
-    if (DNSSuccess == err) {
-      Serial.print("The IP address is ");
-      Serial.print(ip_to_str(ipAddr));
-      Serial.println(".");
-    } else if (DNSTimedOut == err) {
-      Serial.println("Timed out.");
-    } else if (DNSNotFound == err) {
-      Serial.println("Does not exist.");
-    } else {
-      Serial.print("Failed with error code ");
-      Serial.print((int)err, DEC);
-      Serial.println(".");
-    }
-  }  
+    Serial.println("disconnecting.");
+    client.stop();
+    for(;;)
+      ;
+  }
+*/  
+  
+  // You should periodically call this method in your loop(): It will allow
+  // the DHCP library to maintain your DHCP lease, which means that it will
+  // periodically renew the lease and rebind if the lease cannot be renewed.
+  // Thus, unless you call this somewhere in your loop, your DHCP lease might
+  // expire, which you probably do not want :-)
+  EthernetDHCP.maintain();
 }
-
-
