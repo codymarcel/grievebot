@@ -46,7 +46,7 @@ void speakjet_init(){
   delay(1000); 
 }
 
-void speak(const char* message){
+void speak(char* message){
   Serial.println(message);
   speakjet.println(message);
   delay(7000);

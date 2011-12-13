@@ -32,7 +32,7 @@ class SensorAdapter
     if !@authResults
       SensorAdapter.authenticate
     end
-    oauth_header = 'OAuth ' + @authResults['access_token']#[16,@authResults['access_token'].length])
+    oauth_header = 'OAuth ' + @authResults['access_token']
     puts oauth_header
    
     headers 'Authorization' => oauth_header
