@@ -8,7 +8,7 @@
 #define E6  11
 #define E7  12
 
-#define RDY  13
+#define RDY  5
 #define RES  3
 #define SPK  4
 
@@ -44,6 +44,7 @@ void speakjet_init(){
   delay(100);
   digitalWrite(RES, HIGH);
   delay(1000); 
+  digitalWrite(13, LOW);
 }
 
 void speak(char* message){

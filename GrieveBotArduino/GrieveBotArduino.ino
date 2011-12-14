@@ -15,14 +15,15 @@ IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 0, 0);
 
 //byte server[] = "www.google.com";
-IPAddress server(192,168,0,189); // Local
+IPAddress server(192,168,0,195); // Local
 
 
 
 //Create a message buffer to hold the ascii message to be converted to sound
 char message[128]="Number 5 is al i ve!";
 EthernetClient client;
-
+boolean foundMessage = false; 
+int messageIndex=0;
 void setup()
 {
   //Set up a serial port to get the ascii message from the host
@@ -33,11 +34,11 @@ void setup()
   speak("Trying to get an IP address using DHCP");
   
   if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
+    Serial.println("Failed to configure Ethernet using D H C P");
     // initialize the ethernet device not using DHCP:
     Ethernet.begin(mac, ip, gateway, subnet);
   }
-  speak("My IP address");
+  speak("My I P address");
   ip = Ethernet.localIP();
   
   for (byte thisByte = 0; thisByte < 4; thisByte++) {
@@ -58,6 +59,23 @@ void loop()
   if (client.available()) {
     char c = client.read();
     Serial.print(c);
+    if (c == '~') {
+      if (!foundMessage) {
+        Serial.println("Found message delimiter start");
+        foundMessage = true;
+        for (int i=0; i<128; i++) {
+          message[i] = '\0';
+        }
+        return;
+      } else {
+        speak(message);
+        return;
+      }    
+    }
+    
+    if (foundMessage) {
+        message[messageIndex++] = c;
+    }
   }
 
   // if the server's disconnected, stop the client:
@@ -86,7 +104,7 @@ void connectToServer() {
     client.println();
   */
 //    client.println("GET /search?q=arduino HTTP/1.1");
-    client.println("GET / HTTP/1.1");
+    client.println("GET /chatter_feed/feed HTTP/1.1");
     client.println();
   }
   // note the time of this connect attempt:
