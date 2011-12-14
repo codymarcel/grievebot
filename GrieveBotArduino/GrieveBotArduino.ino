@@ -23,11 +23,12 @@ IPAddress server(192,168,0,189); // Local
 char message[128]="Number 5 is al i ve!";
 EthernetClient client;
 
-
 void setup()
 {
   //Set up a serial port to get the ascii message from the host
   Serial.begin(9600);
+  speakjet_init();
+  
   speak(message);  
   speak("Trying to get an IP address using DHCP");
   
