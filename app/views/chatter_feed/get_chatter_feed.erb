@@ -1,7 +1,1 @@
-<ul>
-  <% for @item in @output.each %>
-    <li><%= @item %></li>
-  <% end %>
-</ul>
-
-<%= debug @output %>
+<%= @output['items'][0]["body"]["text"]%>
