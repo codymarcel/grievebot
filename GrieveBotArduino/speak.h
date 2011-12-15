@@ -1,4 +1,5 @@
 //Define the Pin Numbers of the Voicebox shield for the sketch.
+/*
 #define E0  5
 #define E1  6
 #define E2  7
@@ -7,6 +8,7 @@
 #define E5  10
 #define E6  11
 #define E7  12
+*/
 
 #define RDY  5
 #define RES  3
@@ -33,11 +35,13 @@ void speakjet_init(){
   pinMode(RES, OUTPUT);
        
   //Configure all of the Event pins as outputs from Arduino, and set them Low.
+  /*
   for(int i=E0; i<=E7; i++)
   {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
   }
+  */
   
   //All I/O pins are configured. Reset the SpeakJet module
   digitalWrite(RES, LOW);
