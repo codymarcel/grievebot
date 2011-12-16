@@ -1,4 +1,4 @@
-require 'lib/assets/SensorAdapter'
+require './lib/assets/SensorAdapter'
 require 'json'
 
 class ChatterFeedController < ApplicationController
