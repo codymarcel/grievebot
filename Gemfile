@@ -1,12 +1,13 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.3'
+gem 'httparty'
+gem 'localtunnel'
+gem 'json'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'httparty'
-gem 'localtunnel'
 #gem "databasedotcom", "~> 1.2.5"
 
 # Gems used only for assets and not required
