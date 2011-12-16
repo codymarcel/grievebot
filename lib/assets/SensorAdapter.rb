@@ -14,6 +14,15 @@ class SensorAdapter
   def self.authenticate
 
     base_uri = ENV['SALESFORCE_OAUTH2_URI']
+    if base_uri == nil
+      puts "You need to add the variables (
+      SALESFORCE_OAUTH2_URI,
+      SALESFORCE_OAUTH2_KEY,
+      SALESFORCE_OAUTH2_SECRET,
+      SALESFORCE_OAUTH2_URI,
+      SALESFORCE_OAUTH2_PASSWORD
+      ) to the environment."
+    end
     base_auth_query = 
       'grant_type=password'+
       '&client_id='+ENV['SALESFORCE_OAUTH2_KEY']+
