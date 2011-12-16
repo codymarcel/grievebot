@@ -4,6 +4,7 @@ Grievebot::Application.routes.draw do
   
   match 'chatter_feed/feed' => 'chatter_feed#get_chatter_feed'
   match 'static_message' => 'static_message#get_message'
+  match 'localtunnel' => 'localtunnel#establish_tunnel'
   
   resources :output
   resources :message
