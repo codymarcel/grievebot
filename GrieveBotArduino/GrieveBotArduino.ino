@@ -27,7 +27,7 @@ void setup()
   delay(1000);
   speakjet_init();
   
-  speak("Cody");
+  speak(message);
   Serial.println("Trying to get an I P address using D H C P");
   
   if (Ethernet.begin(mac) == 0) {
@@ -43,35 +43,6 @@ void setup()
 
 void loop()
 {
-  char c;
-  
-  
-   if (client.available()) {
-    c = client.read();
-    if ((c == '\r')){
-      Serial.print(c);
-      c = client.read();
-      if(c == '\n'){
-        Serial.print(c);
-        
-        if(++crlf == 2){
-          Serial.println("\nFound header end.\n");
-          speak_msg();
-        }
-        return;
-      }
-    }
-    crlf = 0;
-    Serial.print(c);
-   }
-    
-
-  /*
-  if (is_new_packet) {
-    new_request();
-  } else {
-    process_packet();
-  }
-  */
+  parse_message();  
 }
 

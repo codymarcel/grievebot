@@ -52,7 +52,7 @@ void speakjet_init(){
 }
 
 void speak(String message){
-  Serial.print("\nSpeaking: ");
+ //Serial.print("\nSpeaking: ");
   Serial.println(message);
   
   speakjet.println(message);
