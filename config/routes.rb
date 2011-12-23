@@ -3,10 +3,9 @@ Grievebot::Application.routes.draw do
   get "chatter_feed/index"
   
   match 'chatter_feed/feed' => 'chatter_feed#get_chatter_feed'
+  match 'chatter_feed/post_like' => 'chatter_feed#post_like'
   match 'static_message' => 'static_message#get_message'
   match 'localtunnel' => 'localtunnel#establish_tunnel'
-  match 'like' => 'like#like_post'
-  match 'like/new' => 'like#new'
   
   resources :output
   resources :message

@@ -1,6 +1,5 @@
 <%= @message %>
 
-<% end %>
 <table border="1">
 <% for header in request.env.select {|k,v| k.match("^HTTP.*")} %>
   <tr>
