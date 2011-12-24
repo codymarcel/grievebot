@@ -1,4 +1,17 @@
 <%= @output['items'][0]["body"]["text"]%>
-<form name="like" action="post_like" method="post">
-	<input type="submit" value="Like"/>
-</form>
+<hr>
+Id : <%= @output['items'][0]["id"] %>
+~ Author: <%= @output['items'][0]["actor"]["name"]%>
+~ Feed: <%= @output['items'][0]["parent"]["name"]%>
+<hr>
+<%= @output['items'][0]["id"] %>
+<hr>
+<%= @output['items'][0] %>
+<hr>
+
+<%= form_tag(:action => "post_like") do %>
+	<%= hidden_field_tag(:last_post_url, @last_post_url) %>
+	<%= submit_tag("Like") %>
+<% end %>
+
+<hr>
