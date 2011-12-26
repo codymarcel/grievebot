@@ -35,20 +35,34 @@ class SensorAdapter
     return @authResults
   end
   
-  def self.api_query(query)
-    return send_query(query, 0)
-  end
-
-  def self.send_query(query, try)
-    if !@authResults
-      SensorAdapter.authenticate
-    end
+  def self.prepare_header(query)
     oauth_header = 'OAuth ' + @authResults['access_token']  
     headers 'Authorization' => oauth_header
     headers 'Content-Type' => 'application/json'
-    reading_uri = @authResults['instance_url'] + query 
-    ret = get(reading_uri)
+    return @authResults['instance_url'] + query     
+  end  
+
+  def self.api_query(query)
+    return send_query(query, "get", 0)
+  end
+
+  def self.post_query(query)
+    return send_query(query, "post", 0)    
+  end
+  
+  def self.send_query(query, method, try)
+    if !@authResults
+      SensorAdapter.authenticate
+    end
+
+    reading_uri = prepare_header(query)
     
+    if method.eql?("post")
+      ret = post(reading_uri)
+    else
+      ret = get(reading_uri)
+    end
+      
     if ret.include? 'errorCode'
       if try == 0
         SensorAdapter.authenticate

@@ -16,7 +16,7 @@ class ChatterFeedController < ApplicationController
     # "/services/data/v23.0/chatter/feed-items/0D5U0000006Obi8KAC/likes"
     #url = "feed-items/" + @_params["last_post_url"] + "/likes"
     url = @_params["last_post_url"] + "/likes"
-    feed = feed_query(url)
+    feed = SensorAdapter.post_query(url)
 
     redirect_to "/chatter_feed/feed"
   end
