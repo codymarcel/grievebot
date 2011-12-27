@@ -3,7 +3,9 @@ Message: <%= @output['items'][0]["body"]["text"]%> <br>
 ~ Id : <%= @output['items'][0]["id"] %> <br>
 ~ Author: <%= @output['items'][0]["actor"]["name"]%> <br>
 ~ Feed: <%= @output['items'][0]["parent"]["name"]%> <br>
-~ Liked by Bot: <%= @isLiked %> <br>
+~ Liked by Bot: <%= @is_liked %> <br>
+<hr>
+	<%= @bot_response %> <br>
 <hr>
 
 <%= form_tag(:action => "post_like") do %>

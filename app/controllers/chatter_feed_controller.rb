@@ -1,4 +1,5 @@
 require './lib/assets/SensorAdapter'
+require './lib/assets/ResponseFilter'
 require 'json'
 
 class ChatterFeedController < ApplicationController
@@ -30,12 +31,17 @@ class ChatterFeedController < ApplicationController
     
     feed = feed_query("/services/data/v23.0/chatter/feeds/groups/me/feed-items")
     
-    puts feed.inspect
+    
+#    puts feed.to_xml
+
     @output = feed
     @last_post_url = @output['items'][0]["url"]
-    @isLiked = @output['items'][0]["isLikedByCurrentUser"]
+    @is_liked = @output['items'][0]["isLikedByCurrentUser"]
     
-    puts "Is currently like by bot: " + @isLiked.to_s
+    @bot_response = ResponseFilter.new(feed).to_xml
+    puts @bot_response
+    
+#    puts "Is currently like by bot: " + @is_liked.to_s
     return feed
   end
 
