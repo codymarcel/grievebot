@@ -1,12 +1,9 @@
-<%= @output['items'][0]["body"]["text"]%>
 <hr>
-Id : <%= @output['items'][0]["id"] %>
-~ Author: <%= @output['items'][0]["actor"]["name"]%>
-~ Feed: <%= @output['items'][0]["parent"]["name"]%>
-<hr>
-<%= @output['items'][0]["id"] %>
-<hr>
-<%= @output['items'][0] %>
+Message: <%= @output['items'][0]["body"]["text"]%> <br>
+~ Id : <%= @output['items'][0]["id"] %> <br>
+~ Author: <%= @output['items'][0]["actor"]["name"]%> <br>
+~ Feed: <%= @output['items'][0]["parent"]["name"]%> <br>
+~ Liked by Bot: <%= @isLiked %> <br>
 <hr>
 
 <%= form_tag(:action => "post_like") do %>

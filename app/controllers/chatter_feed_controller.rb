@@ -3,7 +3,8 @@ require 'json'
 
 class ChatterFeedController < ApplicationController
   @last_post_url = "none"
-  
+  @isLiked = "none"
+
   def index
     puts "Inside index"
   end
@@ -32,8 +33,10 @@ class ChatterFeedController < ApplicationController
     puts feed.inspect
     @output = feed
     @last_post_url = @output['items'][0]["url"]
+    @isLiked = @output['items'][0]["isLikedByCurrentUser"]
     
-    return
+    puts "Is currently like by bot: " + @isLiked.to_s
+    return feed
   end
 
   def feed_query(query)

@@ -10,6 +10,7 @@ Grievebot::Application.routes.draw do
   resources :output
   resources :message
   resources :last_post_url
+  resources :isLiked
   resources :like, :only => [:show, :new, :create]
   
   # The priority is based upon order of creation:
