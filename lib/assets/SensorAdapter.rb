@@ -10,7 +10,7 @@ class SensorAdapter
   
   format :json
 
-  #authenticate
+  #authenticate to force.com
   def self.authenticate
 
     base_uri = ENV['SALESFORCE_OAUTH2_URI']
@@ -35,6 +35,7 @@ class SensorAdapter
     return @authResults
   end
   
+  # simply prepares the headers for a request
   def self.prepare_header(query)
     oauth_header = 'OAuth ' + @authResults['access_token']  
     headers 'Authorization' => oauth_header
@@ -42,14 +43,25 @@ class SensorAdapter
     return @authResults['instance_url'] + query     
   end  
 
+  # wrapper for get
   def self.api_query(query)
     return send_query(query, "get", 0)
   end
 
+  #wrapper for post
   def self.post_query(query)
     return send_query(query, "post", 0)    
   end
   
+  ###################################################
+  # Send a query to force.com
+  #
+  # => query  Query string URL
+  # => method Method for query type {get, post}
+  # => try    Number of attempts to make
+  #
+  # => Returns the query results as a json document 
+  ###################################################
   def self.send_query(query, method, try)
     if !@authResults
       SensorAdapter.authenticate
