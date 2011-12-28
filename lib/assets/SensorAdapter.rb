@@ -45,26 +45,37 @@ class SensorAdapter
   
   #authenticate to force.com and db.com
   def self.authenticate
-    @authForceResults = authenticate_force("SALESFORCE")        
-    @authDBResults = authenticate_force("DBDOTCOM")        
+    @authForceResults = authenticate_force("SALESFORCE")
+    
+    #Currently message rules are the only thing
+    #stored in db.com.        
+    if ENV['APPLY_MSG_RULES'].eql? "true"
+      @authDBResults = authenticate_force("DBDOTCOM")    
+    end
   end
   
   # simply prepares the headers for a request
-  def self.prepare_header(query)
-    oauth_header = 'OAuth ' + @authForceResults['access_token']  
+  def self.prepare_header(info, query)
+    oauth_header = 'OAuth ' + info['access_token']  
     headers 'Authorization' => oauth_header
     headers 'Content-Type' => 'application/json'
-    return @authForceResults['instance_url'] + query     
+    return info['instance_url'] + query     
   end  
 
   # wrapper for get
   def self.api_query(query)
-    return send_query(query, "get", 0)
+    if !@authForceResults || !@authDBResults
+      SensorAdapter.authenticate
+    end
+    return send_query(@authForceResults, query, "get", 0)
   end
 
   #wrapper for post
   def self.post_query(query)
-    return send_query(query, "post", 0)    
+    if !@authForceResults || !@authDBResults
+      SensorAdapter.authenticate
+    end
+    return send_query(@authForceResults, query, "post", 0)    
   end
   
   ###################################################
@@ -76,12 +87,9 @@ class SensorAdapter
   #
   # => Returns the query results as a json document 
   ###################################################
-  def self.send_query(query, method, try)
-    if !@authForceResults || !@authDBResults
-      SensorAdapter.authenticate
-    end
+  def self.send_query(info, query, method, try)
 
-    reading_uri = prepare_header(query)
+    reading_uri = prepare_header(info, query)
     
     if method.eql?("post")
       ret = post(reading_uri)
