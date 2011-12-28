@@ -5,42 +5,56 @@ require 'uri'
 
 class SensorAdapter
   include HTTParty
-  @authResults = nil
+  @authForceResults = nil
+  @authDBResults = nil
   @refreshResults = nil
   
   format :json
 
-  #authenticate to force.com
-  def self.authenticate
-
-    base_uri = ENV['SALESFORCE_OAUTH2_URI']
-    if base_uri == nil
-      puts "You need to add the variables (
-      SALESFORCE_OAUTH2_URI,
-      SALESFORCE_OAUTH2_KEY,
-      SALESFORCE_OAUTH2_SECRET,
-      SALESFORCE_OAUTH2_URI,
-      SALESFORCE_OAUTH2_PASSWORD
-      ) to the environment."
+  #################################################
+  # Used for easy switch between login credentials
+  #
+  # target  {SALESFORCE, DBDOTCOM}
+  #################################################
+  def self.authenticate_force(target)
+    
+    if ENV['APPLY_MSG_RULES'] == nil || ENV[target.upcase + '_OAUTH2_URI'] == nil
+      err_msg = "You need to add the variables (
+      APPLY_MSG_RULES,"
+      target.upcase + "_OAUTH2_URI,"
+      target.upcase + "_OAUTH2_KEY,"
+      target.upcase + "_OAUTH2_SECRET,"
+      target.upcase + "_OAUTH2_URI,"
+      target.upcase + "_OAUTH2_PASSWORD
+      ) to the environment." 
+      
+      puts err_msg
+      raise err_msg
     end
     base_auth_query = 
       'grant_type=password'+
-      '&client_id='+ENV['SALESFORCE_OAUTH2_KEY']+
-      '&client_secret='+ENV['SALESFORCE_OAUTH2_SECRET']+
-      '&username='+ENV['SALESFORCE_OAUTH2_USERNAME']+
-      '&password='+ENV['SALESFORCE_OAUTH2_PASSWORD']
-    @authResults = post(base_uri, { :body => base_auth_query })
-    puts @authResults.to_yaml
+      '&client_id='+ENV[target.upcase + '_OAUTH2_KEY']+
+      '&client_secret='+ENV[target.upcase + '_OAUTH2_SECRET']+
+      '&username='+ENV[target.upcase + '_OAUTH2_USERNAME']+
+      '&password='+ENV[target.upcase + '_OAUTH2_PASSWORD']
+    results = post(ENV[target.upcase + '_OAUTH2_URI'], { :body => base_auth_query })
+    puts results.to_yaml
     
-    return @authResults
+    return results
+  end
+  
+  #authenticate to force.com and db.com
+  def self.authenticate
+    @authForceResults = authenticate_force("SALESFORCE")        
+    @authDBResults = authenticate_force("DBDOTCOM")        
   end
   
   # simply prepares the headers for a request
   def self.prepare_header(query)
-    oauth_header = 'OAuth ' + @authResults['access_token']  
+    oauth_header = 'OAuth ' + @authForceResults['access_token']  
     headers 'Authorization' => oauth_header
     headers 'Content-Type' => 'application/json'
-    return @authResults['instance_url'] + query     
+    return @authForceResults['instance_url'] + query     
   end  
 
   # wrapper for get
@@ -63,7 +77,7 @@ class SensorAdapter
   # => Returns the query results as a json document 
   ###################################################
   def self.send_query(query, method, try)
-    if !@authResults
+    if !@authForceResults || !@authDBResults
       SensorAdapter.authenticate
     end
 
