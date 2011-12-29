@@ -1,0 +1,2 @@
+class GrievebotController < ApplicationController
+end
