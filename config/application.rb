@@ -49,5 +49,10 @@ module Grievebot
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    config.assets.precompile += ['full_unit.jpg']
+    config.assets.precompile += ['top_overview.jpg']
+    config.assets.precompile += ['top_tts256.jpg']
+    config.assets.precompile += ['connectors_on_speakjet.jpg']
   end
 end
