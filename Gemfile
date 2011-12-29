@@ -5,7 +5,7 @@ gem 'httparty'
 gem 'localtunnel'
 gem 'json'
 #gem 'libxml-ruby', '>= 0.8.3'
-gem 'libxml-ruby', '1.1.3', :require => 'libxml'
+gem 'libxml-ruby', '1.1.3'
 #gem 'libxml-ruby-1.1.3-x86-mswin32-60', '1.1.3', :require => 'libxml', :path => 'vendor/gems/libxml-ruby-1.1.3-x86-mswin32-60'
 
 # Bundle edge Rails instead:
