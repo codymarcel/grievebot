@@ -1,2 +1,0 @@
-module StaticMessageHelper
-end
