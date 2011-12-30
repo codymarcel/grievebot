@@ -9,8 +9,6 @@ gem 'sass', '3.1.5'
 gem 'libxml-ruby', '1.1.3', :platforms => :ruby
 #gem 'libxml-ruby-1.1.3-x86-mswin32-60', '1.1.3', :platforms => :mswin, :path => 'C:\RailsInstaller\Ruby1.8.7\lib\ruby\gems\1.8\gems\libxml-ruby-1.1.3-x86-mswin32-60'
 
-
-
 group :production do
   gem 'thin'
   gem 'libxml-ruby', '1.1.3'
