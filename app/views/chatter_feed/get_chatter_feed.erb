@@ -1,16 +1,17 @@
-<hr>
+<!-- Removed so we only send back the actual message -->
+<!-- <hr>
 Message: <%= @output['items'][0]["body"]["text"]%> <br>
 ~ Id : <%= @output['items'][0]["id"] %> <br>
 ~ Author: <%= @output['items'][0]["actor"]["name"]%> <br>
 ~ Feed: <%= @output['items'][0]["parent"]["name"]%> <br>
 ~ Liked by Bot: <%= @is_liked %> <br>
-<hr>
-	<%= @bot_response %> <br>
-<hr>
+<hr> -->	
 
+<%= @bot_response %> <br>
+
+<!-- <hr> -->
 <%= form_tag(:action => "post_like") do %>
 	<%= hidden_field_tag(:last_post_url, @last_post_url) %>
 	<%= submit_tag("Like") %>
 <% end %>
 
-<hr>
