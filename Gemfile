@@ -10,6 +10,7 @@ group :development do
   gem 'libxml-ruby-1.1.3-x86-mswin32-60', '1.1.3', :require => 'libxml', :path => 'vendor/gems/libxml-ruby-1.1.3-x86-mswin32-60'
 end
 group :production do
+  gem 'thin'
   gem 'libxml-ruby', '1.1.3'
 end
 
