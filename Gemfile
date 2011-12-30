@@ -7,7 +7,7 @@ gem 'json'
 #gem 'libxml-ruby', '>= 0.8.3'
 
 group :development do
-  gem 'libxml-ruby-1.1.3-x86-mswin32-60', '1.1.3', :require => 'libxml', :path => 'vendor/gems/libxml-ruby-1.1.3-x86-mswin32-60'
+  gem 'libxml-ruby-1.1.3-x86-mswin32-60', '1.1.3', :require => 'libxml', :path => 'C:\RailsInstaller\Ruby1.8.7\lib\ruby\gems\1.8\gems\libxml-ruby-1.1.3-x86-mswin32-60'
 end
 group :production do
   gem 'thin'
