@@ -50,7 +50,7 @@ class SensorAdapter
     #Currently message rules are the only thing
     #stored in db.com.        
     if ENV['APPLY_MSG_RULES'].eql? "true"
-      @authDBResults = authenticate_force("DBDOTCOM")    
+     # @authDBResults = authenticate_force("DBDOTCOM")    
     end
   end
   
@@ -64,7 +64,7 @@ class SensorAdapter
 
   # wrapper for get
   def self.api_query(query)
-    if !@authForceResults || !@authDBResults
+    if !@authForceResults && !@authDBResults
       SensorAdapter.authenticate
     end
     return send_query(@authForceResults, query, "get", 0)
