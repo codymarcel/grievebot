@@ -1,0 +1,29 @@
+C:/RailsInstaller/Ruby1.8.7/bin/ruby.exe extconf.rb 
+creating Makefile
+
+make
+Makefile:130: warning: overriding commands for target `C:/Users/cody/Documents/Aptana'
+Makefile:124: warning: ignoring old commands for target `C:/Users/cody/Documents/Aptana'
+Makefile:130: warning: overriding commands for target `Studio'
+Makefile:124: warning: ignoring old commands for target `Studio'
+Makefile:130: warning: overriding commands for target `3'
+Makefile:124: warning: ignoring old commands for target `3'
+gcc -I. -I/C/RailsInstaller/Ruby1.8.7/lib/ruby/1.8/i386-mingw32 -I/C/RailsInstaller/Ruby1.8.7/lib/ruby/1.8/i386-mingw32 -I.   -g -O3 -DFD_SETSIZE=256   -Wall  -c generator.c
+gcc -shared -s -o generator.so generator.o -L. -LC:/RailsInstaller/Ruby1.8.7/lib -L. -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\tk\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\tcl\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\pdcurses\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\openssl\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\zlib\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\iconv\\lib -LC:\\Users\\Luis\\Projects\\oss\\oneclick\\rubyinstaller\\sandbox\\gdbm\\lib  -Wl,--enable-auto-image-base,--enable-auto-import,--export-all   -lmsvcrt-ruby18  -lshell32 -lws2_32  
+
+make install
+Makefile:130: warning: overriding commands for target `C:/Users/cody/Documents/Aptana'
+Makefile:124: warning: ignoring old commands for target `C:/Users/cody/Documents/Aptana'
+Makefile:130: warning: overriding commands for target `Studio'
+Makefile:124: warning: ignoring old commands for target `Studio'
+Makefile:130: warning: overriding commands for target `3'
+Makefile:124: warning: ignoring old commands for target `3'
+install -d C:/Users/cody/Documents/Aptana
+install -d Studio
+install -d 3
+install -d Workspace/grievebot/development/ruby/1.8/gems/json-1.6.2/ext/json/ext/json/ext
+/usr/bin/install -c -m 0755 generator.so C:/Users/cody/Documents/Aptana Studio 3 Workspace/grievebot/development/ruby/1.8/gems/json-1.6.2/ext/json/ext/json/ext
+/usr/bin/install: omitting directory `C:/Users/cody/Documents/Aptana'
+/usr/bin/install: omitting directory `Studio'
+/usr/bin/install: omitting directory `3'
+make: *** [Workspace/grievebot/development/ruby/1.8/gems/json-1.6.2/ext/json/ext/json/ext/generator.so] Error 1

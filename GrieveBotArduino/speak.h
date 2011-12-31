@@ -51,17 +51,16 @@ void speakjet_init(){
   digitalWrite(13, LOW);
 }
 
-void speak(String message){
- //Serial.print("\nSpeaking: ");
-  Serial.println(message);
+void speak(String &m){
+  Serial.print("\nSpeaking: ");
+  Serial.println(m);
   
-  speakjet.println(message);
+  speakjet.println(m);
   
   // Wait for it to finish speaking
-  delay(20);
   while(digitalRead(SPK)) {
-    delay(250);
+    delay(1000);
   }
-  delay(250);
+  delay(300);
 }
 

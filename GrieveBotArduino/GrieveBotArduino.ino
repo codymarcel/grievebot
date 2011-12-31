@@ -20,6 +20,10 @@ IPAddress subnet(255, 255, 0, 0);
 //Create a message buffer to hold the ascii message to be converted to sound
 
 //EthernetClient client; 
+//char message[BUF_SIZE]="x term in naate";
+String message="x term in naate";
+int message_index = 0;
+
 void setup()
 {
   //Set up a serial port to get the ascii message from the host
@@ -37,12 +41,23 @@ void setup()
   }
   ip = Ethernet.localIP();
   //speak(ip_to_str(ip));
-  connectToServer();
+  //connectToServer();
 }
 
-
+boolean gotMessage = false;
 void loop()
-{  
-  parse_message();  
+{
+  connectToServer();
+  if(client.available()){  
+    Serial.println("before parse");
+    parse_message();  
+    delay(5000);
+    gotMessage = true;
+    //server_listener();
+  }
+  if(gotMessage){
+    Serial.println("infinite");
+    while(1){}
+  }
 }
 
