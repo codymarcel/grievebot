@@ -97,7 +97,7 @@ class SensorAdapter
       ret = get(reading_uri)
     end
       
-    if ret.include? 'errorCode'
+    if ret.include? 'ErrorCode'
       if try == 0
         SensorAdapter.authenticate
         send_query(query, 1)

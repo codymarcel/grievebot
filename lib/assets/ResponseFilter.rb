@@ -31,7 +31,7 @@ class ResponseFilter
     message << XML::Node.new_text(@message['items'][0]["body"]["text"])
     output.root << message
 
-    return output.inspect
+    return output.to_s
   end
   
   def to_json()

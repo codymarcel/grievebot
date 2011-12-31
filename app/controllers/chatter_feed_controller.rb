@@ -5,6 +5,7 @@ require 'json'
 class ChatterFeedController < ApplicationController
   @last_post_url = "none"
   @isLiked = "none"
+  @error = false
 
   def index
     puts "Inside index"
@@ -31,14 +32,24 @@ class ChatterFeedController < ApplicationController
     
     feed = feed_query("/services/data/v23.0/chatter/feeds/groups/me/feed-items")
     
-    
 #    puts feed.to_xml
-
+    @error = false
     @output = feed
-    @last_post_url = @output['items'][0]["url"]
-    @is_liked = @output['items'][0]["isLikedByCurrentUser"]
+    if @output.include?('items')
+      @last_post_url = @output['items'][0]["url"]
+      @is_liked = @output['items'][0]["isLikedByCurrentUser"]
+    else
+      @error = true
+      @last_post_url = nil
+      @is_liked = nil
+   end
     
-    @bot_response = ResponseFilter.new(feed).to_xml
+    if not @error
+      @bot_response = ResponseFilter.new(feed).to_xml
+    else
+      puts "REQUEST ERROR"
+      @bot_response = feed.to_yaml
+    end
     puts @bot_response
     
 #    puts "Is currently like by bot: " + @is_liked.to_s
