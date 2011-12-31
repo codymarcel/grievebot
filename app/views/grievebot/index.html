@@ -3,8 +3,43 @@
 	<head>
 		<title>GrieveBot</title>
 	</head>
+	<style type="text/css">
+		body{
+			margin: 0px;
+			font-family: Helvetica, sans-serif;
+			font-size: 1em;
+			line-height: 1.5em;
+		}
+		
+		h1 {
+			margin:0px;
+			padding: 10px;
+			background-color:#3E5972;
+			color:#FFFFFF;			
+		}
+		
+		h2 {
+			color:#557462;
+		}
+		div {
+			padding: 10px;
+		}
+		
+		p {
+			padding-left: 10px;
+		}
+	</style>
+<body>
 	<h1>GrieveBot</h1>
+	<div>
+	<h2>About</h2>
+	<p>GrieveBot is an <a href="http://www.arduino.cc" target="_blank">Arduino</a> based robot that connects to a <a href="http://www.salesforce.com/chatter/whatischatter/" target="_blank">Salesforce.com Chatter</a> feed via a 
+		remote <a href="http://www.heroku.com" target="_blank">Heroku application</a> and reads chatter feeds out loud.  It can also "like" chatter feeds directly from the device!  GrieveBot is called so because it connects to the
+		infamous "Airing of Grievances" chatter feed.</p>
+	</div>
+	<div style="float:left; width:600px;">
 	<h2>Requirements in addition to the Arduino</h2>
+	<p>
 	<ul>
 		<li>
 			See README in application root directory for more information.
@@ -30,22 +65,23 @@
 			</ul>
 		</li>
 	</ul>
+	</p>
 	<h2>Online retrieval of of the feed for testing purposes.</h2>
-	<a href="chatter_feed/feed" target="_blank">Latest Chatter Message</a>
-	<br />
+	<p><a href="chatter_feed/feed" target="_blank">Latest Chatter Message</a></p>
 	<h2>Wiring up the VoiceBox</h2>
+	<p>
 	This article gives a good set of instructions on how to connect the TTS256 text processor.
 	<br />
 	<a href="http://www.sparkfun.com/tutorials/166" target="_blank">Adding the TTS256 to the Voice Box Shield</a>
+	</p>
+	</div>
+	<div style="float:left; width: 600px;">
+	<p>These are the images of how we wired it up.  They are a little more clear as to where the wires connect.  Click for full size.</p>
+	<a href="/assets/full_unit.jpg" target="_blank"><img src="/assets/full_unit_250.jpg"/></a>
+	<a href="/assets/top_overview.jpg" target="_blank"><img src="/assets/top_overview_250.jpg"/></a>
 	<br />
-	<br />
-	These are the images of how we wired it up. They are a little more clear as to where the wires connect.
-	<br />
-	<%= image_tag("/assets/full_unit.jpg", :size => "1000x1000") %>
-	<br />
-	<%= image_tag("/assets/top_overview.jpg", :size => "1000x1000") %>
-	<br />
-	<%= image_tag("/assets/top_tts256.jpg", :size => "1000x1000") %>
-	<br />
-	<%= image_tag("/assets/connectors_on_speakjet.jpg", :size => "1000x1000") %>
+	<a href="/assets/top_tts256.jpg" target="_blank"><img src="/assets/top_tts256_250.jpg"/></a>
+	<a href="/assets/connectors_on_speakjet.jpg" target="_blank"><img src="/assets/connectors_on_speakjet_250.jpg"/></a>
+	</div>
+</body>
 </html>
