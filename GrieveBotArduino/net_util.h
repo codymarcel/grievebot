@@ -57,6 +57,7 @@ void zeroBuffer(char * message, int len){
 }
 
 // GHETTO PARSER (G-PARSE)
+//   matches tag names to global variables
 void parse_xml(String &msg){
   String current_tag;
   boolean is_tag = false;
@@ -70,6 +71,7 @@ void parse_xml(String &msg){
   Serial.println("Starting XML Parse:");
   for (int i=0; i < msg.length(); i++) {
     char c = msg.charAt(i);
+    
     // start reading the name of the new tag
     if (c == '<') {
       is_tag = true;
@@ -78,7 +80,7 @@ void parse_xml(String &msg){
       continue;
     }
     
-    // read a tag name till the end of the tag
+    // read a tag name till the end of that tag
     if (is_tag) { 
       if (c != '>') {
         current_tag.concat(c); 
@@ -133,6 +135,7 @@ void parse_header(){
     // This will print the header
     Serial.print(c);
     
+    // Find two \r\n's at the end of the header
     if ((c == '\r')){
       c = client.read();
       if(c == '\n'){        
@@ -147,14 +150,16 @@ void parse_header(){
   }  
 }
 
+// Parse bytes from the ethernet client
+//   Fast-forward past header
+//   Get raw payload (XML from server)
+//   Parse out payload into global vars
+//   Speak our message
 void parse_message(){
   parse_header();
 
   String msg = get_message();
-  Serial.println("###### RAW RESPONSE ######");
-  Serial.println(msg);
   parse_xml(msg);
-  Serial.println("#### PARSED RESPONSE #####");
   Serial.print("Author: ");
   Serial.println(author);
   Serial.print("URL: ");
@@ -162,8 +167,6 @@ void parse_message(){
   Serial.print("Message: ");
   Serial.println(xml_message);
   speak(xml_message);
-  delay(10000);
-  //client.stop();
 }
 
 void server_listener(){
