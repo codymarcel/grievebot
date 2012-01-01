@@ -49,14 +49,15 @@ void loop()
 {
   connectToServer();
   if(client.available()){  
-    Serial.println("before parse");
     parse_message();  
     delay(5000);
     gotMessage = true;
     //server_listener();
   }
+  
+  // Stop it from spamming requests and hitting the API request limit
   if(gotMessage){
-    Serial.println("infinite");
+    Serial.println("...infinite loop...");
     while(1){}
   }
 }

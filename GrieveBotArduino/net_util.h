@@ -29,18 +29,16 @@ void new_request() {
   client.println("");
 }
 
+// attempt to connect to the remote server
 void connectToServer() {
-  
-  // attempt to connect, and wait a millisecond:
-  Serial.print("Connecting to server: ");
-  Serial.print(server);
-  Serial.print(" : ");
-  Serial.println(port);
-  
-  if (client.connect(server, port)) {
-    Serial.println("Sending request");
+  if (client.connect(server, port)) {    
+    Serial.print("Connected to server... ");
+    Serial.print(server);
+    Serial.print(" : ");
+    Serial.println(port);
+    Serial.println("Sending request...");
     new_request();
-  } else{
+  } else {
 //    Serial.println("Stopping...");
 //    client.flush();
 //    client.stop();
@@ -68,7 +66,7 @@ void parse_xml(String &msg){
   last_post_url = "";
   xml_message = "";
   
-  Serial.println("Starting XML Parse:");
+  Serial.println("Starting XML Parse...");
   for (int i=0; i < msg.length(); i++) {
     char c = msg.charAt(i);
     
@@ -107,28 +105,28 @@ void parse_xml(String &msg){
   }
 }
 
-String get_message(){
+void get_message(String &output){
   char c;
-  String msg, len;
   
-  Serial.println("\nGetting Message:\n");
+  Serial.println("Getting payload...");
   while(client.available()){
     c = client.read();
-    String s = String(c);
-    msg.concat(c);
+    output.concat(c);
   }
+  output.trim();
+  Serial.println(output);
   
-  return msg;
 }
 
 void parse_header(){
   if(!client.available()){
-    Serial.println("\nNothing to parse.\n");
+    Serial.println("Nothing to parse...");
     return;
   }    
  
   int crlf = 0;
   char c;
+  Serial.println("Reading header...");
   while (client.available()) {
     c = client.read();
     
@@ -136,18 +134,18 @@ void parse_header(){
     Serial.print(c);
     
     // Find two \r\n's at the end of the header
-    if ((c == '\r')){
+    if ((c == '\r')) {
       c = client.read();
       if(c == '\n'){        
-        if(++crlf == 2){
-          Serial.println("\nFound header end.\n");
+        if(++crlf == 2) {
+          Serial.println(); 
           return;
         }
       }
-    } else{
+    } else {
       crlf = 0;
     }
-  }  
+  }
 }
 
 // Parse bytes from the ethernet client
@@ -156,23 +154,23 @@ void parse_header(){
 //   Parse out payload into global vars
 //   Speak our message
 void parse_message(){
+  String msg;
+  
   parse_header();
-
-  String msg = get_message();
+  get_message(msg);
   parse_xml(msg);
-  Serial.print("Author: ");
-  Serial.println(author);
-  Serial.print("URL: ");
-  Serial.println(last_post_url);
-  Serial.print("Message: ");
-  Serial.println(xml_message);
+  
+  Serial.print("Author: "); Serial.println(author);
+  Serial.print("URL: "); Serial.println(last_post_url);
+  Serial.print("Message: "); Serial.println(xml_message);
+  
   speak(xml_message);
 }
 
 void server_listener(){
   // listen for incoming clients
   EthernetClient localClient = localServer.available();
-  
+  String msg;
   if (localClient) {
     
     // an http request ends with a blank line
@@ -190,7 +188,7 @@ void server_listener(){
           localClient.println("Content-Type: text/html");
           localClient.println("SPEAKING");
           localClient.println();
-          String msg = get_message();
+          get_message(msg);
           speak(msg);
           break;
         }

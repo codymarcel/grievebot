@@ -96,8 +96,11 @@ class SensorAdapter
     else
       ret = get(reading_uri)
     end
-      
-    if ret.include? 'ErrorCode'
+    
+    # Try to detect error condition and reauthenticate
+    # This might happen if the session expires after the
+    # server has been up for awhile
+    if ret.include? 'errorCode'
       if try == 0
         SensorAdapter.authenticate
         send_query(query, 1)
