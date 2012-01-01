@@ -19,6 +19,7 @@
 
 //Create a SoftSerial Object to send strings to the TTS256 chip.
 SoftwareSerial speakjet = SoftwareSerial(0, txPin);
+String message="o m g I am grieving out loud";
 
 void speakjet_init(){
    //Configure the pins for the SpeakJet module
@@ -52,15 +53,19 @@ void speakjet_init(){
 }
 
 void speak(String &m){
-  Serial.print("\nSpeaking: ");
+  Serial.print("Speaking: ");
   Serial.println(m);
-  
   speakjet.println(m);
+
+  delay(20);
   
   // Wait for it to finish speaking
   while(digitalRead(SPK)) {
+    Serial.print('.');
     delay(1000);
   }
-  delay(300);
+  delay(1000);
+  Serial.println();
+  
 }
 

@@ -3,7 +3,6 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SoftwareSerial.h>
-#include "dns.h"
 #include "speak.h"
 #include "net_util.h"
 
@@ -21,7 +20,6 @@ IPAddress subnet(255, 255, 0, 0);
 
 //EthernetClient client; 
 //char message[BUF_SIZE]="x term in naate";
-String message="x term in naate";
 int message_index = 0;
 
 void setup()
@@ -32,6 +30,7 @@ void setup()
   speakjet_init();
   
   speak(message);
+
   Serial.println("Trying to get an I P address using D H C P");
   
   if (Ethernet.begin(mac) == 0) {

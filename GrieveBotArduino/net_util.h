@@ -127,24 +127,28 @@ void parse_header(){
   int crlf = 0;
   char c;
   Serial.println("Reading header...");
-  while (client.available()) {
-    c = client.read();
-    
-    // This will print the header
-    Serial.print(c);
-    
-    // Find two \r\n's at the end of the header
-    if ((c == '\r')) {
+  while (1) {
+    if (client.available()) {
       c = client.read();
-      if(c == '\n'){        
-        if(++crlf == 2) {
-          Serial.println(); 
-          return;
+      
+      // This will print the header
+      Serial.print(c);
+
+      // Find two \r\n's at the end of the header
+      if ((c == '\r')) {
+        c = client.read();
+        if(c == '\n'){        
+          if(++crlf == 2) {
+            return;
+          } else {
+            Serial.println();
+          }
         }
+      } else {
+        crlf = 0;
       }
-    } else {
-      crlf = 0;
     }
+    delay(1);
   }
 }
 
@@ -167,6 +171,7 @@ void parse_message(){
   speak(xml_message);
 }
 
+/*
 void server_listener(){
   // listen for incoming clients
   EthernetClient localClient = localServer.available();
@@ -208,38 +213,4 @@ void server_listener(){
     localClient.stop();
   }  
 }
-
-/*
-void parse_message(){
-  char c;
-   if (client.available()) {
-    c = client.read();
-    if ((c == '\r')){
-      Serial.print(c);
-      c = client.read();
-      if(c == '\n'){
-        Serial.print(c);
-        
-        if(++crlf == 2){
-          //Serial.println("\nFound header end.\n");
-          speak_msg();
-        }
-        return;
-      }
-    }
-    crlf = 0;
-    // Prints the raw header response
-    // Serial.print(c);
-   }  
-}
 */
-
-/*
-void reset_network_status() {
-  is_new_packet = true;
-  read_header = false;
-  zeroBuffer(message, BUF_SIZE);
-  message_index = 0;
-}
-*/
-
