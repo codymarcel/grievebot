@@ -55,8 +55,10 @@ void speakjet_init(){
 void speak(String &m){
   Serial.print("Speaking: ");
   Serial.println(m);
+  noInterrupts();
   speakjet.println(m);
-
+  interrupts();
+  
   delay(20);
   
   // Wait for it to finish speaking
@@ -66,6 +68,6 @@ void speak(String &m){
   }
   delay(1000);
   Serial.println();
-  
+  speakjet.flush();
 }
 

@@ -44,9 +44,27 @@ void setup()
 }
 
 boolean gotMessage = false;
+boolean liked = false;
 void loop()
 {
-  connectToServer();
+
+  connectToServer("GET");
+  if(client.available()){  
+    parse_message();  
+    delay(5000);
+    gotMessage = true;
+    //server_listener();
+  }
+    
+  // Stop it from spamming requests and hitting the API request limit
+  if(gotMessage){
+    Serial.println("disconnecting.");
+    client.stop();
+    while(1){}
+  }
+
+  /*
+  connectToServer("GET");
   if(client.available()){  
     parse_message();  
     delay(5000);
@@ -54,10 +72,21 @@ void loop()
     //server_listener();
   }
   
-  // Stop it from spamming requests and hitting the API request limit
   if(gotMessage){
-    Serial.println("...infinite loop...");
+    Serial.println("disconnecting.");
+    client.stop();
+    connectToServer("POST");
+    gotMessage = false;
+    liked = true;  
+  }
+  
+  // Stop it from spamming requests and hitting the API request limit
+  if(gotMessage && liked){
+    Serial.println("disconnecting.");
+    client.stop();
     while(1){}
   }
+
+  */
 }
 
