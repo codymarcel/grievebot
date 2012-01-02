@@ -64,7 +64,7 @@ class SensorAdapter
 
   # wrapper for get
   def self.api_query(query)
-    if !@authForceResults && !@authDBResults
+    if !@authForceResults 
       SensorAdapter.authenticate
     end
     return send_query(@authForceResults, query, "get", 0)
@@ -72,7 +72,7 @@ class SensorAdapter
 
   #wrapper for post
   def self.post_query(query)
-    if !@authForceResults || !@authDBResults
+    if !@authForceResults 
       SensorAdapter.authenticate
     end
     return send_query(@authForceResults, query, "post", 0)    
