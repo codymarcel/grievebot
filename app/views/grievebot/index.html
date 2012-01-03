@@ -2,106 +2,130 @@
 <html>
 	<head>
 		<title>GrieveBot</title>
-	<style type="text/css">
-		body{
-			margin: 0px;
-			font-family: Helvetica, sans-serif;
-			font-size: 1em;
-			line-height: 1.5em;
-			font-weight: 200;
-		}
-		
-		h1 {
-			margin:0px;
-			padding: 10px;
-			background-color:#3E5972;
-			color:#FFFFFF;
-			font-weight:300;
-		}
-		
-		h2 {
-			color:#3E5972; 
-			background-color:#E8E8FA;;
-			border-radius: 10px;
-			padding: 5px;
-			font-weight:200;
-		}
-		div {
-			padding: 10px;
-		}
-		
-		p {
-			padding-left: 10px;
-		}
-		
-		.colored-border {
-			border: solid 3px #555555;
-		}
-	</style>
-	<script src="/assets/highslide-full.min.js" type="text/javascript"></script>
-</head>
-<body>
-	<h1>GrieveBot <img src="/assets/grieve_face.png" /></h1>
-	<div style="width: 600px; float:left;">
-	<h2>About</h2>
-	
-	<p><a href="/assets/GrieveBot-Diagram.png" class="highslide" onclick="return hs.expand(this, { src: '/assets/GrieveBot-Diagram.png', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})">
-		<img id="thumb2" align="right" width="200" height="150" src="/assets/GrieveBot-Diagram.png" title="Click to enlarge">
-	</a>GrieveBot is an <a href="http://www.arduino.cc" target="_blank">Arduino</a> based robot that connects to a <a href="http://www.salesforce.com/chatter/whatischatter/" target="_blank">Salesforce.com Chatter</a> feed via a 
-		remote <a href="http://www.heroku.com" target="_blank">Heroku application</a> and reads chatter feeds out loud.  It can also "like" chatter feeds directly from the device!  GrieveBot is called so because it connects to the
-		infamous "Airing of Grievances" chatter feed.</p>
-
-		<h2>Requirements in addition to the Arduino</h2>
-		<p>
-		<ul>
-			<li>
-				See README in application root directory for more information.
-			</li>
-			<li>
-				<a href="http://www.sparkfun.com/products/9799" target="_blank">Voice Box Shield</a>
-			</li>
-			<li>
-				<a href="http://www.sparkfun.com/products/9811" target="_blank">TTS256</a>
-			</li>
-			<li><a href="http://www.vellemanusa.com/products/view/?country=us&lang=enu&id=350678">Velleman sound-to-light kit</a> (optional)</li>
-			<li>
-				<a href="https://github.com/codymarcel/grievebot" target="_blank">Grievebot source</a>
+		<style type="text/css">
+			body {
+				margin: 0px;
+				font-family: Helvetica, sans-serif;
+				font-size: 1em;
+				line-height: 1.5em;
+				font-weight: 200;
+			}
+			h1 {
+				margin: 0px;
+				padding: 10px;
+				background-color: #3E5972;
+				color: #FFFFFF;
+				font-weight: 300;
+			}
+			h2 {
+				color: #3E5972;
+				background-color: #E8E8FA;;
+				border-radius: 10px;
+				padding: 5px;
+				font-weight: 200;
+			}
+			div {
+				padding: 10px;
+			}
+			p {
+				padding-left: 10px;
+			}
+			.colored-border {
+				border: solid 3px #555555;
+			}
+		</style>
+		<script src="/assets/highslide-full.min.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<h1>GrieveBot <img src="/assets/grieve_face.png" /></h1>
+		<div style="width: 600px; float:left;">
+			<h2>About</h2>
+			<p>
+				<a href="/assets/GrieveBot-Diagram.png" class="highslide" onclick="return hs.expand(this, { src: '/assets/GrieveBot-Diagram.png', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"> <img id="thumb2" align="right" width="200" height="150" src="/assets/GrieveBot-Diagram.png" title="Click to enlarge"> </a>GrieveBot is an <a href="http://www.arduino.cc" target="_blank">Arduino</a> based robot that connects to a <a href="http://www.salesforce.com/chatter/whatischatter/" target="_blank">Salesforce.com Chatter</a> feed via a
+				remote <a href="http://www.heroku.com" target="_blank">Heroku application</a> and reads chatter feeds out loud.  It can also "like" chatter feeds directly from the device!  GrieveBot is called so because it connects to the
+				infamous "Airing of Grievances" chatter feed.
+			</p>
+			<h2>Requirements in addition to the Arduino</h2>
+			<p>
 				<ul>
 					<li>
-						git clone git://github.com/codymarcel/grievebot.git
+						See README in application root directory for more information.
 					</li>
 					<li>
-						cd grievebot
+						<a href="http://www.sparkfun.com/products/9799" target="_blank">Voice Box Shield</a>
 					</li>
 					<li>
-						bundle install
+						<a href="http://www.sparkfun.com/products/9811" target="_blank">TTS256</a>
+					</li>
+					<li>
+						<a href="http://www.vellemanusa.com/products/view/?country=us&lang=enu&id=350678">Velleman sound-to-light kit</a> (optional)
+					</li>
+					<li>
+						<a href="https://github.com/codymarcel/grievebot" target="_blank">Grievebot source</a>
+						<ul>
+							<li>
+								git clone git://github.com/codymarcel/grievebot.git
+							</li>
+							<li>
+								cd grievebot
+							</li>
+							<li>
+								bundle install
+							</li>
+						</ul>
 					</li>
 				</ul>
-			</li>
-		</ul>
-		</p>
-		<h2>Online retrieval of of the feed for testing purposes.</h2>
-		<p><a href="chatter_feed/feed" target="_blank">Latest Chatter Message</a></p>
-		<h2>Wiring up the VoiceBox</h2>
-		<p>
-		This article gives a good set of instructions on how to connect the TTS256 text processor.
-		<a href="http://www.sparkfun.com/tutorials/166" target="_blank">Adding the TTS256 to the Voice Box Shield</a>
-		</p>
-		<h2>Notes</h2>
-		<ul>
-			<li>Speakjet codes 200-254 are special effects :D</li>
-			<li>Server response must fit in a single packet</li>
-		</ul>
-	</div>
-	<div style="float:left; width: 250px;">
-			<p style="font-size:.75em; line-height: 1em;">These are the images of how we wired it up.  They are a little more clear as to where the wires connect.  Click for full size.</p>
-			<p>
-				<a href="/assets/hardware_flow.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/hardware_flow.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb3" src="/assets/hardware_flow.jpg" width="250"/></a> <br />
-		    <a href="/assets/full_unit.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/full_unit.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb3" src="/assets/full_unit_250.jpg"/></a> <br />
-			<a href="/assets/top_overview.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/top_overview.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb4" src="/assets/top_overview_250.jpg"/></a> <br />
-			<a href="/assets/top_tts256.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/top_tts256.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb5" src="/assets/top_tts256_250.jpg"/></a> <br />
-			<a href="/assets/connectors_on_speakjet.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/connectors_on_speakjet.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/connectors_on_speakjet_250.jpg"/></a><br /> 
 			</p>
-	</div>
-</body>
+			<h2>Online retrieval of of the feed for testing purposes.</h2>
+			<p>
+				<a href="chatter_feed/feed" target="_blank">Latest Chatter Message</a>
+			</p>
+			<h2>Wiring up the VoiceBox</h2>
+			<p>
+				This article gives a good set of instructions on how to connect the TTS256 text processor. <a href="http://www.sparkfun.com/tutorials/166" target="_blank">Adding the TTS256 to the Voice Box Shield</a>
+			</p>
+			<h2>Notes</h2>
+			<ul>
+				<li>
+					Speakjet codes 200-254 are special effects :D
+				</li>
+				<li>
+					Server response must fit in a single packet
+				</li>
+			</ul>
+		</div>
+		<div style="float:left; width: 250px;">
+			<p style="font-size:.75em; line-height: 1em;">
+				These are the images of how we wired it up.  They are a little more clear as to where the wires connect.  Click for full size.
+			</p>
+			<p>
+				<a href="/assets/hardware_flow.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/hardware_flow.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb3" src="/assets/hardware_flow.jpg" width="250"/></a>
+				<br />
+				<a href="/assets/full_unit.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/full_unit.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb3" src="/assets/full_unit_250.jpg"/></a>
+				<br />
+				<a href="/assets/top_overview.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/top_overview.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb4" src="/assets/top_overview_250.jpg"/></a>
+				<br />
+				<a href="/assets/top_tts256.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/top_tts256.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb5" src="/assets/top_tts256_250.jpg"/></a>
+				<br />
+				<a href="/assets/connectors_on_speakjet.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/connectors_on_speakjet.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/connectors_on_speakjet_250.jpg"/></a>
+				<br />
+				<a href="/assets/head_front.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_front.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_front.jpg"/></a>
+				<br />
+				<a href="/assets/head_side.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_side.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_side.jpg"/></a>
+				<br />
+				<a href="/assets/head_inside.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_inside.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_inside.jpg"/></a>
+				<br />
+				<a href="/assets/head_on_stand.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_on_stand.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_on_stand.jpg"/></a>
+				<br />
+				<a href="/assets/servo_for_head_rotation.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/servo_for_head_rotation.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/servo_for_head_rotation.jpg"/></a>
+				<br />
+				<a href="/assets/head_gear_2.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_gear_2.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_gear_2.jpg"/></a>
+				<br />
+				<a href="/assets/head_gear.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/head_gear.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/head_gear.jpg"/></a>
+				<br />
+				<a href="/assets/final_arduino_stack.jpg" class="highslide" onclick="return hs.expand(this, { src: '/assets/final_arduino_stack.jpg', wrapperClassName: 'colored-border', outlineType: null, align: 'center'})"><img id="thumb6" src="/assets/final_arduino_stack.jpg"/></a>
+				<br />
+			</p>
+		</div>
+	</body>
 </html>
