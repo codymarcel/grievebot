@@ -15,11 +15,6 @@ long lastAttemptTime = 0;            // last time you connected to the server, i
   int port = 80;
 #endif
 
-//int serverPort = 1337;
-//int sr = 0;
-//int sn = 0;
-
-//EthernetServer localServer(serverPort);
 EthernetClient client;
 
 void urlencode(char* dest, char* src) {
@@ -131,8 +126,8 @@ void parse_xml(String &msg){
   xml_message = "";
   
   Serial.println("Starting XML Parse...");
-  for (int i=0; i < msg.length(); i++) {
-    char c = msg.charAt(i);
+  while(client.available()){
+    char c = client.read();
     
     // start reading the name of the new tag
     if (c == '<') {
@@ -149,7 +144,8 @@ void parse_xml(String &msg){
       } else {
         is_tag = false;
         is_data = true;
-        Serial.print("Found tag: "); Serial.println(current_tag);  
+        
+//        Serial.print("Found tag: "); Serial.println(current_tag);  
         continue;
       }
     }
@@ -167,19 +163,6 @@ void parse_xml(String &msg){
       }
     }
   }
-}
-
-void get_message(String &output){
-  char c;
-  
-  Serial.println("Getting payload...");
-  while(client.available()){
-    c = client.read();
-    output.concat(c);
-  }
-  output.trim();
-  Serial.println(output);
-  
 }
 
 void parse_header(){
@@ -225,9 +208,9 @@ void parse_message(){
   String msg;
   
   parse_header();
-  get_message(msg);
+  //get_message(msg);
   parse_xml(msg);
-  
+
   Serial.print("Author: "); Serial.println(author);
   Serial.print("URL: "); Serial.println(last_post_url);
   Serial.print("Message: "); Serial.println(xml_message);
@@ -235,46 +218,3 @@ void parse_message(){
   speak(xml_message);
 }
 
-/*
-void server_listener(){
-  // listen for incoming clients
-  EthernetClient localClient = localServer.available();
-  String msg;
-  if (localClient) {
-    
-    // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
-    while (localClient.connected()) {
-      
-      if (localClient.available()) {
-        char c = localClient.read();
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
-        if (c == '\n' && currentLineIsBlank) {
-          // send a standard http response header
-          localClient.println("HTTP/1.1 200 OK");
-          localClient.println("Content-Type: text/html");
-          localClient.println("SPEAKING");
-          localClient.println();
-          get_message(msg);
-          speak(msg);
-          break;
-        }
-        if (c == '\n') {
-          // you're starting a new line
-          currentLineIsBlank = true;
-        } 
-        else if (c != '\r') {
-          // you've gotten a character on the current line
-          currentLineIsBlank = false;
-        }
-      }
-    }
-    // give the web browser time to receive the data
-    delay(1);
-    // close the connection:
-    localClient.stop();
-  }  
-}
-*/

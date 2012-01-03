@@ -20,7 +20,9 @@ IPAddress subnet(255, 255, 0, 0);
 
 //EthernetClient client; 
 //char message[BUF_SIZE]="x term in naate";
+String message = "x term in naate";
 int message_index = 0;
+volatile boolean isLiked = false;
 
 void setup()
 {
@@ -30,6 +32,8 @@ void setup()
   speakjet_init();
   
   speak(message);
+  
+  
 
   Serial.println("Trying to get an I P address using D H C P");
   
@@ -41,13 +45,21 @@ void setup()
   ip = Ethernet.localIP();
   //speak(ip_to_str(ip));
   //connectToServer();
+  
+  //attachInterrupt(0, enableLike, CHANGE);
 }
+
+
+void enableLike(){
+  isLiked = !isLiked;
+}
+
 
 boolean gotMessage = false;
 boolean liked = false;
 void loop()
 {
-
+  
   connectToServer("GET");
   if(client.available()){  
     parse_message();  
@@ -58,9 +70,14 @@ void loop()
     
   // Stop it from spamming requests and hitting the API request limit
   if(gotMessage){
-    Serial.println("disconnecting.");
+    String s = String("disconnecting.");
+    speak(s);
     client.stop();
-    while(1){}
+    while(1){
+      if (isLiked) {
+        Serial.println("Liked!");
+      }
+    }
   }
 
   /*

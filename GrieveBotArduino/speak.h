@@ -1,16 +1,6 @@
 //Define the Pin Numbers of the Voicebox shield for the sketch.
-/*
-#define E0  5
-#define E1  6
-#define E2  7
-#define E3  8
-#define E4  9
-#define E5  10
-#define E6  11
-#define E7  12
-*/
 
-#define RDY  5
+//#define RDY  13
 #define RES  3
 #define SPK  4
 
@@ -19,7 +9,6 @@
 
 //Create a SoftSerial Object to send strings to the TTS256 chip.
 SoftwareSerial speakjet = SoftwareSerial(0, txPin);
-String message="o m g I am grieving out loud";
 
 void speakjet_init(){
    //Configure the pins for the SpeakJet module
@@ -30,44 +19,33 @@ void speakjet_init(){
   speakjet.begin(9600);    
     
   //Configure the Ready pin as an input
-  pinMode(RDY, INPUT);
+  //pinMode(RDY, INPUT);
   
   //Configure Reset line as an output
   pinMode(RES, OUTPUT);
-       
-  //Configure all of the Event pins as outputs from Arduino, and set them Low.
-  /*
-  for(int i=E0; i<=E7; i++)
-  {
-    pinMode(i, OUTPUT);
-    digitalWrite(i, LOW);
-  }
-  */
-  
+         
   //All I/O pins are configured. Reset the SpeakJet module
   digitalWrite(RES, LOW);
   delay(100);
   digitalWrite(RES, HIGH);
   delay(1000); 
-  digitalWrite(13, LOW);
+  //digitalWrite(13, LOW);
 }
 
 void speak(String &m){
+  
+  speakjet.flush();
   Serial.print("Speaking: ");
-  Serial.println(m);
-  noInterrupts();
+  
   speakjet.println(m);
-  interrupts();
-  
-  delay(20);
-  
+
   // Wait for it to finish speaking
   while(digitalRead(SPK)) {
     Serial.print('.');
-    delay(1000);
+    delay(300);
   }
-  delay(1000);
-  Serial.println();
-  speakjet.flush();
+  
+  delay(300);
+  Serial.println(m);
 }
 
