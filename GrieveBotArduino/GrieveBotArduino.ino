@@ -8,6 +8,8 @@
 #include "net_util.h"
 
 #define BUTTON_PIN 6
+#define PROXIMITY_PIN A0 
+#define DISTANCE_THRESHOLD 100000
 
 //long lastAttemptTime = 0;            // last time you connected to the server, in milliseconds
 //int port = 3000;
@@ -54,6 +56,10 @@ void setup()
   pinMode(BUTTON_PIN, INPUT);
   digitalWrite(BUTTON_PIN, HIGH);
   PCintPort::attachInterrupt(BUTTON_PIN, enableLike, RISING);
+  
+  // Set up proximity sensor pin
+  pinMode(PROXIMITY_PIN, INPUT);
+  
   //attachInterrupt(0, enableLike, CHANGE);
 }
 
@@ -68,7 +74,15 @@ boolean liked = false;
 int ct = 0;
 void loop()
 {
-  byte cmd;
+  // Read our proxmity sensor
+  int  reading = analogRead(PROXIMITY_PIN);
+  delay(200);
+  Serial.print("Reading: ");
+  Serial.println(reading);
+
+  if (reading < DISTANCE_THRESHOLD) {
+    return;
+  }
   
   connectToServer("GET");
   if(client.available()){  
@@ -91,15 +105,22 @@ void loop()
     delay(10000);
     
     // only do 3 requests
-    if(ct >= 0){
+    if(ct >= 3){
       while(1){
-        if (isLiked) {
-          Serial.print("Liked button pressed");
-          delay(500);
-          isLiked=false;
-        }
       }
     }
+  }
+  
+  if (isLiked) {
+    Serial.println("Liked button pressed");
+    if (is_already_liked) {
+      Serial.println("I already like this post");
+    } else {
+      Serial.println("I like this");
+      connectToServer("POST");
+      delay(500);
+    }
+    isLiked=false;
   }
 
   /*

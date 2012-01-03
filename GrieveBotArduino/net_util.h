@@ -5,7 +5,7 @@ String last_message;
 String author;
 String last_post_url;
 String xml_message;
-boolean is_liked;
+boolean is_already_liked;
 
 long lastAttemptTime = 0;            // last time you connected to the server, in milliseconds
 #if 0
@@ -99,7 +99,7 @@ void connectToServer(String method) {
       new_request();
     }
   } else {
-    Serial.println("Cant connect...");
+//    Serial.println("Cant connect...");
 //    client.flush();
 //    client.stop();
   }
@@ -118,6 +118,7 @@ void zeroBuffer(char * message, int len){
 //   matches tag names to global variables
 void parse_xml(String &msg){
   String current_tag;
+  String is_liked_string;
   boolean is_tag = false;
   boolean is_data = false;
   
@@ -162,7 +163,15 @@ void parse_xml(String &msg){
       if (current_tag.equalsIgnoreCase("last_post_url")) {
         last_post_url.concat(c);
       }
+      if (current_tag.equalsIgnoreCase("is_liked")) {
+        is_liked_string.concat(c);
+      }
     }
+  }
+  if (is_liked_string.equalsIgnoreCase("true")) {
+    is_already_liked = true;
+  } else {
+    is_already_liked = false;
   }
 }
 
@@ -216,6 +225,7 @@ void parse_message(){
   Serial.print("Author: "); Serial.println(author);
   Serial.print("URL: "); Serial.println(last_post_url);
   Serial.print("Message: "); Serial.println(xml_message);
+  Serial.print("Is liked: "); Serial.println(is_already_liked);
     
   String a = String(" says");
   author.concat(a);
