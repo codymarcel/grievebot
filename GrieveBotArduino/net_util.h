@@ -226,5 +226,6 @@ void parse_message(){
   }else{
     a = String("nothing new");
     speak(a);
+  }
 }
 

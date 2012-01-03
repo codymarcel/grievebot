@@ -1,10 +1,13 @@
-
 //Soft serial library used to send serial commands on pin 2 instead of regular serial pin.
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SoftwareSerial.h>
+#include <PinChangeInt.h>
+#include <PinChangeIntConfig.h>
 #include "speak.h"
 #include "net_util.h"
+
+#define BUTTON_PIN 6
 
 //long lastAttemptTime = 0;            // last time you connected to the server, in milliseconds
 //int port = 3000;
@@ -22,7 +25,7 @@ IPAddress subnet(255, 255, 0, 0);
 //char message[BUF_SIZE]="x term in naate";
 String message = "x term in naate";
 int message_index = 0;
-volatile boolean isLiked = false;
+volatile boolean isLiked = 0;
 
 void setup()
 {
@@ -46,12 +49,17 @@ void setup()
   //speak(ip_to_str(ip));
   //connectToServer();
   
+  // Attach an interrupt to pin 6 using the PCinPort library
+  // This allows us to use non-standard arduino pins as interrupts
+  pinMode(BUTTON_PIN, INPUT);
+  digitalWrite(BUTTON_PIN, HIGH);
+  PCintPort::attachInterrupt(BUTTON_PIN, enableLike, RISING);
   //attachInterrupt(0, enableLike, CHANGE);
 }
 
 
 void enableLike(){
-  isLiked = !isLiked;
+  isLiked=true;
 }
 
 
@@ -60,7 +68,8 @@ boolean liked = false;
 int ct = 0;
 void loop()
 {
-   
+  byte cmd;
+  
   connectToServer("GET");
   if(client.available()){  
     parse_message();  
@@ -82,10 +91,12 @@ void loop()
     delay(10000);
     
     // only do 3 requests
-    if(ct >= 3){
+    if(ct >= 0){
       while(1){
         if (isLiked) {
-          Serial.println("Liked!");
+          Serial.print("Liked button pressed");
+          delay(500);
+          isLiked=false;
         }
       }
     }
