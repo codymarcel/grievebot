@@ -57,9 +57,10 @@ void enableLike(){
 
 boolean gotMessage = false;
 boolean liked = false;
+int ct = 0;
 void loop()
 {
-  
+   
   connectToServer("GET");
   if(client.available()){  
     parse_message();  
@@ -70,38 +71,33 @@ void loop()
     
   // Stop it from spamming requests and hitting the API request limit
   if(gotMessage){
+    ct++;
+    gotMessage = false;
     String s = String("disconnecting.");
     speak(s);
+    client.flush();
     client.stop();
-    while(1){
-      if (isLiked) {
-        Serial.println("Liked!");
+    
+    // wait 10
+    delay(10000);
+    
+    // only do 3 requests
+    if(ct >= 3){
+      while(1){
+        if (isLiked) {
+          Serial.println("Liked!");
+        }
       }
     }
   }
 
   /*
-  connectToServer("GET");
-  if(client.available()){  
-    parse_message();  
-    delay(5000);
-    gotMessage = true;
-    //server_listener();
-  }
-  
   if(gotMessage){
     Serial.println("disconnecting.");
     client.stop();
     connectToServer("POST");
     gotMessage = false;
     liked = true;  
-  }
-  
-  // Stop it from spamming requests and hitting the API request limit
-  if(gotMessage && liked){
-    Serial.println("disconnecting.");
-    client.stop();
-    while(1){}
   }
 
   */

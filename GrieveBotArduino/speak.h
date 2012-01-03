@@ -5,7 +5,7 @@
 #define SPK  4
 
 //Pin 2 of the shield should be wired to the TTS256 chip.
-#define txPin  2
+#define txPin 2
 
 //Create a SoftSerial Object to send strings to the TTS256 chip.
 SoftwareSerial speakjet = SoftwareSerial(0, txPin);

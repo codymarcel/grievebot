@@ -1,6 +1,7 @@
 #define BUF_SIZE 512
 
 // XML STORAGE
+String last_message;
 String author;
 String last_post_url;
 String xml_message;
@@ -98,7 +99,7 @@ void connectToServer(String method) {
       new_request();
     }
   } else {
-//    Serial.println("Stopping...");
+    Serial.println("Cant connect...");
 //    client.flush();
 //    client.stop();
   }
@@ -211,10 +212,19 @@ void parse_message(){
   //get_message(msg);
   parse_xml(msg);
 
+
   Serial.print("Author: "); Serial.println(author);
   Serial.print("URL: "); Serial.println(last_post_url);
   Serial.print("Message: "); Serial.println(xml_message);
     
-  speak(xml_message);
+  String a = String(" says");
+  author.concat(a);
+  if(!last_message.equals(xml_message)){  
+    speak(author);
+    speak(xml_message);
+    last_message = xml_message;
+  }else{
+    a = String("nothing new");
+    speak(a);
 }
 
