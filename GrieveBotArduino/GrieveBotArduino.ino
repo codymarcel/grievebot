@@ -26,6 +26,9 @@ IPAddress subnet(255, 255, 0, 0);
 //EthernetClient client; 
 //char message[BUF_SIZE]="x term in naate";
 String message = "x term in naate";
+String post_liked = "This post is worthy of grieve bot";
+String post_was_liked = "grieve bot already likes this";
+
 int message_index = 0;
 volatile boolean isLiked = 0;
 
@@ -38,8 +41,7 @@ void setup()
   
   speak(message);
   
-  
-
+ 
   Serial.println("Trying to get an I P address using D H C P");
   
   if (Ethernet.begin(mac) == 0) {
@@ -59,35 +61,35 @@ void setup()
   
   // Set up proximity sensor pin
   pinMode(PROXIMITY_PIN, INPUT);
-  
-  //attachInterrupt(0, enableLike, CHANGE);
+
 }
 
 
+// Interrupt handler for like button
 void enableLike(){
   isLiked=true;
 }
 
 
-boolean gotMessage = false;
-boolean liked = false;
+boolean gotMessage = false;     // indicate that a message was recieved from the server
+boolean ready_for_like = false; // indicate that we have parsed a post (for like button)
 int ct = 0;
 void loop()
 {
   // Read our proxmity sensor
   int  reading = analogRead(PROXIMITY_PIN);
   delay(200);
-  Serial.print("Reading: ");
-  Serial.println(reading);
-
+  
+  // Don't go on unless someone is nearby
   if (reading < DISTANCE_THRESHOLD) {
     return;
   }
   
   connectToServer("GET");
-  if(client.available()){  
-    parse_message();  
+  if(client.available()){ 
+    parse_message();
     delay(5000);
+    ready_for_like = true;
     gotMessage = true;
     //server_listener();
   }
@@ -111,13 +113,14 @@ void loop()
     }
   }
   
-  if (isLiked) {
-    Serial.println("Liked button pressed");
-    if (is_already_liked) {
-      Serial.println("I already like this post");
+  // if the like interrupt was triggered then
+  // check if we have a post and like it
+  if (isLiked && ready_for_like) {
+    if (is_already_liked) { // We've already seen this post
+      Serial.println(post_was_liked);
     } else {
-      Serial.println("I like this");
-      connectToServer("POST");
+      Serial.println(post_liked);
+      connectToServer("POST"); // Send the like command
       delay(500);
     }
     isLiked=false;
