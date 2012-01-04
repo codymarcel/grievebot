@@ -8,9 +8,16 @@ class SensorAdapter
   @authForceResults = nil
   @authDBResults = nil
   @refreshResults = nil
-  
+  @saveThisUrl = nil
   format :json
 
+  def self.getUrl()
+    return @saveThisUrl
+  end
+  
+  def self.saveUrl(url)
+    @saveThisUrl=url
+  end
   #################################################
   # Used for easy switch between login credentials
   #
@@ -90,7 +97,7 @@ class SensorAdapter
   def self.send_query(info, query, method, try)
 
     reading_uri = prepare_header(info, query)
-    
+    puts reading_uri
     if method.eql?("post")
       ret = post(reading_uri)
     else
