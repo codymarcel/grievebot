@@ -15,8 +15,9 @@ class ChatterFeedController < ApplicationController
   # This method will Like the last comment on the chatter group
   ##############################################################
   def post_like()
-    puts "Last post url: ", @_params["last_post_url"];
-    url = SensorAdapter.getUrl() + "/likes"
+    puts "Last post url: ", @_params["last_post_url"]
+#    url = SensorAdapter.getUrl() + "/likes"
+    url = @_params["last_post_url"] + "/likes"
     puts url
     feed = SensorAdapter.post_query(url)
 

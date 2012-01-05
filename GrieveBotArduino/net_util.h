@@ -52,6 +52,8 @@ void new_request() {
 
 void like_post() {
 
+  Serial.println("creating header");
+  
   int buff = 20;
   int len = last_post_url.length() + 1 + buff;
   char uncodedUrl[len];
@@ -59,6 +61,8 @@ void like_post() {
   last_post_url.toCharArray(uncodedUrl, len);
   
   urlencode(encodedUrl, uncodedUrl);  
+  Serial.print("URL: ");
+  Serial.println(encodedUrl);
   
   String body = String("last_post_url=");
   body.concat(encodedUrl);
@@ -99,7 +103,8 @@ void connectToServer(String method) {
       new_request();
     }
   } else {
-//    Serial.println("Cant connect...");
+    Serial.println("Cant connect...");
+    delay(200);
 //    client.flush();
 //    client.stop();
   }

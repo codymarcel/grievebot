@@ -1,15 +1,10 @@
-//Define the Pin Numbers of the Voicebox shield for the sketch.
-
-//#define RDY  13
+#include <SoftwareSerial.h>
 #define RES  3
 #define SPK  4
-
-//Pin 2 of the shield should be wired to the TTS256 chip.
 #define txPin 2
 
 //Create a SoftSerial Object to send strings to the TTS256 chip.
 SoftwareSerial speakjet = SoftwareSerial(0, txPin);
-//String r2d2 = String("\xDF\x04\xDE\x05\xCF\x04\xEE");
 
 void speakjet_init(){
    //Configure the pins for the SpeakJet module
@@ -33,17 +28,12 @@ void speakjet_init(){
   //digitalWrite(13, LOW);
 }
 
-void speak(String &m){
+void speak(String m){
   
   speakjet.flush();
   Serial.print("Speaking: ");
   
   speakjet.println(m);
-  
-  // imitate r2d2 if the message contains "bot"
-  /*if(m.indexOf("bot")){
-    speak(r2d2);
-  }*/
 
   // Wait for it to finish speaking
   while(digitalRead(SPK)) {
@@ -54,3 +44,20 @@ void speak(String &m){
   Serial.println(m);
 }
 
+void setup()
+{
+  //Set up a serial port to get the ascii message from the host
+  Serial.begin(9600);
+  delay(1000);
+  speakjet_init();
+ 
+  speak("hello");
+
+}
+void loop()
+{
+  speak("I am the grievebot");
+  delay(3000);
+  speak("Arduino isn't very good yet");
+  delay(5000);
+}
