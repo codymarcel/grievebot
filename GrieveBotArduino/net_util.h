@@ -184,6 +184,7 @@ void parse_xml(String &msg){
 }
 
 void parse_header(){
+  //Serial.println("Parsing Header...");
   if(!client.available()){
     Serial.println("Nothing to parse...");
     return;

@@ -124,8 +124,6 @@ void loop()
       speak(s);
       connectToServer("POST"); // Send the like command
       delay(500);
-  //    client.flush();
-        client.stop();
 //    }
     isLiked=false;
   }
