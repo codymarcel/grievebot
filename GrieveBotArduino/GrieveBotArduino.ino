@@ -55,7 +55,7 @@ void setup()
   // This allows us to use non-standard arduino pins as interrupts
   pinMode(BUTTON_PIN, INPUT);
   digitalWrite(BUTTON_PIN, HIGH);
-  PCintPort::attachInterrupt(BUTTON_PIN, enableLike, RISING);
+  PCintPort::attachInterrupt(BUTTON_PIN, enableLike, FALLING);
   
   // Set up proximity sensor pin
   //pinMode(PROXIMITY_PIN, INPUT);
@@ -67,7 +67,6 @@ void setup()
 void enableLike(){
   isLiked=true;
 }
-
 
 boolean gotMessage = false;     // indicate that a message was recieved from the server
 boolean ready_for_like = false; // indicate that we have parsed a post (for like button)
@@ -99,7 +98,7 @@ void loop()
     gotMessage = false;
     String s = String("disconnecting.");
     speak(s);
-    client.flush();
+//    client.flush();
     client.stop();
     
     // wait 10
@@ -121,22 +120,14 @@ void loop()
 //    if (is_already_liked) { // We've already seen this post
       //Serial.println(post_was_liked);
 //    } else {
-      //Serial.println(post_liked);
+    String s = "We are now liking post.";
+      speak(s);
       connectToServer("POST"); // Send the like command
       delay(500);
+  //    client.flush();
+        client.stop();
 //    }
     isLiked=false;
   }
-
-  /*
-  if(gotMessage){
-    Serial.println("disconnecting.");
-    client.stop();
-    connectToServer("POST");
-    gotMessage = false;
-    liked = true;  
-  }
-
-  */
 }
 

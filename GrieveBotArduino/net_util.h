@@ -52,7 +52,7 @@ void new_request() {
 
 void like_post() {
 
-  Serial.println("creating header");
+  //Serial.println("creating header");
   
   int buff = 20;
   int len = last_post_url.length() + 1 + buff;
@@ -61,17 +61,13 @@ void like_post() {
   last_post_url.toCharArray(uncodedUrl, len);
   
   urlencode(encodedUrl, uncodedUrl);  
-  Serial.print("URL: ");
-  Serial.println(encodedUrl);
+  //Serial.print("URL: ");
+  //Serial.println(encodedUrl);
   
   String body = String("last_post_url=");
   body.concat(encodedUrl);
   body.concat("&commit=Like");
-  len = body.length();
-
-  Serial.print("Body: ");
-  Serial.println(body);
-  
+  len = body.length();  
 
   client.println("POST /chatter_feed/post_like HTTP/1.1");
   client.println("Host: grievebot.heroku.com"); 
@@ -85,10 +81,16 @@ void like_post() {
 
   client.println(body);
   
+  Serial.print("Body: ");
+  Serial.println(body);
 }
 
 // attempt to connect to the remote server
 void connectToServer(String method) {
+  if(client.available()){
+    return;  
+  }
+  
   if (client.connect(server, port)) {    
     Serial.print("Connected to server... ");
     Serial.print(server);
@@ -98,13 +100,14 @@ void connectToServer(String method) {
     if(method.equalsIgnoreCase("POST")){
       Serial.println("Sending POST...");
       like_post();
+      Serial.println("POST Complete");
     } else{
       Serial.println("Sending GET...");
       new_request();
     }
   } else {
     Serial.println("Cant connect...");
-    delay(200);
+//    delay(200);
 //    client.flush();
 //    client.stop();
   }
