@@ -12,11 +12,11 @@ long lastAttemptTime = 0;            // last time you connected to the server, i
   int port = 3000;
   IPAddress server(192,168,0,195); // Local
 #else
-  char server[] = "grievebot.heroku.com";
-  int port = 80;
+  //char server[] = "grievebot.heroku.com";
+  //int port = 80;
 #endif
 
-EthernetClient client;
+Client client("greivebot.heroku.com", 80);
 
 void urlencode(char* dest, char* src) {
   int i;
@@ -56,6 +56,7 @@ void like_post() {
   
   int buff = 20;
   int len = last_post_url.length() + 1 + buff;
+  /*
   char uncodedUrl[len];
   char encodedUrl[len];
   last_post_url.toCharArray(uncodedUrl, len);
@@ -63,9 +64,10 @@ void like_post() {
   urlencode(encodedUrl, uncodedUrl);  
   //Serial.print("URL: ");
   //Serial.println(encodedUrl);
+  */
   
   String body = String("last_post_url=");
-  body.concat(encodedUrl);
+//  body.concat(encodedUrl);
   body.concat("&commit=Like");
   len = body.length();  
 
@@ -83,19 +85,24 @@ void like_post() {
   
   Serial.print("Body: ");
   Serial.println(body);
+  delete &body;
 }
 
 // attempt to connect to the remote server
 void connectToServer(String method) {
-  if(client.available()){
+  if(client.connected()){
+    Serial.println("Already connected");
     return;  
   }
   
-  if (client.connect(server, port)) {    
+  Serial.println("connecting");
+  if (client.connect()) {    
+    /*
     Serial.print("Connected to server... ");
     Serial.print(server);
     Serial.print(" : ");
     Serial.println(port);
+    */
     
     if(method.equalsIgnoreCase("POST")){
       Serial.println("Sending POST...");
@@ -106,7 +113,7 @@ void connectToServer(String method) {
       new_request();
     }
   } else {
-    Serial.println("Cant connect...");
+//    Serial.println("Cant connect...");
 //    delay(200);
 //    client.flush();
 //    client.stop();
@@ -135,7 +142,7 @@ void parse_xml(String &msg){
   last_post_url = "";
   xml_message = "";
   
-  Serial.println("Starting XML Parse...");
+  //Serial.println("Starting XML Parse...");
   while(client.available()){
     char c = client.read();
     
@@ -186,13 +193,14 @@ void parse_xml(String &msg){
 void parse_header(){
   //Serial.println("Parsing Header...");
   if(!client.available()){
-    Serial.println("Nothing to parse...");
+    //Serial.println("Nothing to parse...");
     return;
   }    
  
   int crlf = 0;
   char c;
-  Serial.println("Reading header...");
+
+  //Serial.println("Reading header...");
   while (1) {
     if (client.available()) {
       c = client.read();
@@ -230,12 +238,13 @@ void parse_message(){
   //get_message(msg);
   parse_xml(msg);
 
-
+  /*
   Serial.print("Author: "); Serial.println(author);
   Serial.print("URL: "); Serial.println(last_post_url);
   Serial.print("Message: "); Serial.println(xml_message);
   Serial.print("Is liked: "); Serial.println(is_already_liked);
-    
+  */
+  
   String a = String(" says");
   author.concat(a);
   if(!last_message.equals(xml_message)){  
@@ -246,5 +255,6 @@ void parse_message(){
     a = String("nothing new");
     speak(a);
   }
+  delete &a;
 }
 

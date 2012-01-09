@@ -33,9 +33,9 @@ void speakjet_init(){
   //digitalWrite(13, LOW);
 }
 
-void speak(String &m){
+void speak(char *m){
   
-  speakjet.flush();
+//  speakjet.flush();
   Serial.print("Speaking: ");
   
   speakjet.println(m);
