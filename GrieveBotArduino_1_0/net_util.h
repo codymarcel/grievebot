@@ -18,7 +18,7 @@ long lastAttemptTime = 0;            // last time you connected to the server, i
 
 EthernetClient client;
 
-void urlencode(char* dest, char* src) {
+/*void urlencode(char* dest, char* src) {
   int i;
   
   //Zero out dest
@@ -41,13 +41,28 @@ void urlencode(char* dest, char* src) {
     }
   }
 }
+*/
+void clientString (PGM_P s) {
+  char c;
+  while ((c = pgm_read_byte(s++)) != 0){
+    client.print(c);
+  }
+}
 
+void showString (PGM_P s) {
+  char c;
+  while ((c = pgm_read_byte(s++)) != 0){
+    Serial.print(c);
+  }
+}
+    
 void new_request() {
-  client.println("GET /chatter_feed/feed HTTP/1.1");
-  client.println("Host: grievebot.heroku.com"); 
-  client.println("Proxy-Connection: keep-alive");
-  client.println("User-Agent: Arduino (Arduino Test Code)");
-  client.println("");
+  
+  clientString(PSTR("GET /chatter_feed/feed HTTP/1.1\r\n"));
+  clientString(PSTR("Host: grievebot.heroku.com\r\n"));
+  clientString(PSTR("Proxy-Connection: keep-alive\r\n"));
+  clientString(PSTR("User-Agent: Arduino (Arduino Test Code)\r\n"));
+  clientString(PSTR("\r\n"));
 }
 
 void like_post() {
@@ -56,67 +71,55 @@ void like_post() {
   
   int buff = 20;
   int len = last_post_url.length() + 1 + buff;
-  /*
-  char uncodedUrl[len];
-  char encodedUrl[len];
-  last_post_url.toCharArray(uncodedUrl, len);
+  //char uncodedUrl[len];
+  //char encodedUrl[len];
+  //last_post_url.toCharArray(uncodedUrl, len);
   
-  urlencode(encodedUrl, uncodedUrl);  
+  //urlencode(encodedUrl, uncodedUrl);  
   //Serial.print("URL: ");
   //Serial.println(encodedUrl);
-  */
-  
+  //delete uncodedUrl;
   String body = String("last_post_url=");
-//  body.concat(encodedUrl);
-  body.concat("&commit=Like");
+  //body.concat(encodedUrl);
+
+  body.concat("commit=Like");
   len = body.length();  
 
-  client.println("POST /chatter_feed/post_like HTTP/1.1");
-  client.println("Host: grievebot.heroku.com"); 
-  client.println("Referer: http://grievebot.heroku.com/chatter_feed/feed");
-  client.println("User-Agent: Arduino (Arduino Test Code)");
-  client.println("Content-Type: application/x-www-form-urlencoded");
-  client.println( "Connection: close" );
-  client.print("Content-Length: ");
+  clientString(PSTR("POST /chatter_feed/post_like HTTP/1.1\r\n"));
+  clientString(PSTR("Host: grievebot.heroku.com\r\n"));
+  clientString(PSTR("Referer: http://grievebot.heroku.com/chatter_feed/feed\r\n"));
+  clientString(PSTR("User-Agent: Arduino (Arduino Test Code)\r\n"));
+  clientString(PSTR("Content-Type: application/x-www-form-urlencoded\r\n"));
+  clientString(PSTR("Content-Length: "));
   client.println(len);
   client.println("");
-
-  client.println(body);
   
-  Serial.print("Body: ");
-  Serial.println(body);
-  delete &body;
+  
+  //Serial.print("Body: ");
+  //Serial.println(body);
+  //delete &body;
 }
 
 // attempt to connect to the remote server
 void connectToServer(String method) {
   if(client.connected()){
-    Serial.println("Already connected");
+    //Serial.println("Already connected");
     return;  
   }
   
-  Serial.println("connecting");
+  //showString(PSTR("connecting...\r\n"));
   if (client.connect("greivebot.heroku.com", 80)) {    
-    /*
-    Serial.print("Connected to server... ");
-    Serial.print(server);
-    Serial.print(" : ");
-    Serial.println(port);
-    */
     
     if(method.equalsIgnoreCase("POST")){
-      Serial.println("Sending POST...");
+      //Serial.println("Sending POST...");
+      //showString(PSTR("liking post...\r\n"));
       like_post();
-      Serial.println("POST Complete");
+      //Serial.println("POST Complete");
     } else{
-      Serial.println("Sending GET...");
+      //Serial.println("Sending GET...");
       new_request();
     }
   } else {
-//    Serial.println("Cant connect...");
-//    delay(200);
-//    client.flush();
-//    client.stop();
   }
     
   // note the time of this connect attempt:
@@ -206,7 +209,7 @@ void parse_header(){
       c = client.read();
       
       // This will print the header
-      Serial.print(c);
+      //Serial.print(c);
 
       // Find two \r\n's at the end of the header
       if ((c == '\r')) {
@@ -215,7 +218,7 @@ void parse_header(){
           if(++crlf == 2) {
             return;
           } else {
-            Serial.println();
+//            /Serial.println();
           }
         }
       } else {

@@ -1,4 +1,5 @@
 //Soft serial library used to send serial commands on pin 2 instead of regular serial pin.
+#include <avr/pgmspace.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <SoftwareSerial.h>
@@ -33,15 +34,14 @@ void setup()
   Serial.begin(9600);
   delay(1000);
   
-  Serial.println("Trying to get an I P address using D H C P");
+  //Serial.println("Trying to get an I P address using D H C P");
   
   if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using D H C P");
+    //Serial.println("Failed to configure Ethernet using D H C P");
     // initialize the ethernet device not using DHCP:
     Ethernet.begin(mac, ip, gateway, subnet);
   }
-  ip = Ethernet.localIP();
-  Serial.println("Ethernet Connected");
+  //ip = Ethernet.localIP();
 
   // Activate voice
   speakjet_init();  
@@ -59,7 +59,6 @@ void setup()
   
   // Set up proximity sensor pin
   //pinMode(PROXIMITY_PIN, INPUT);
-  Serial.println("Setup complete");
 
 }
 
@@ -104,10 +103,10 @@ void loop()
     client.stop();
     
     // wait 10
-    delay(5000);
+    delay(1000);
     
     // only do 3 requests
-    if(ct >= 20){
+    if(ct >= 200){
       while(1){
       }
     }
@@ -122,8 +121,6 @@ void loop()
 //    if (is_already_liked) { // We've already seen this post
       //Serial.println(post_was_liked);
 //    } else {
-    String s = "We are now liking post.";
-    speak(s);
     connectToServer("POST"); // Send the like command
     delay(500);
 //    }

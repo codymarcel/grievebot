@@ -9,7 +9,6 @@
 
 //Create a SoftSerial Object to send strings to the TTS256 chip.
 SoftwareSerial speakjet = SoftwareSerial(0, txPin);
-//String r2d2 = String("\xDF\x04\xDE\x05\xCF\x04\xEE");
 
 void speakjet_init(){
    //Configure the pins for the SpeakJet module
@@ -36,15 +35,10 @@ void speakjet_init(){
 void speak(String &m){
   
   speakjet.flush();
-  Serial.print("Speaking: ");
+  //Serial.print("Speaking: ");
   
   speakjet.println(m);
   
-  // imitate r2d2 if the message contains "bot"
-  /*if(m.indexOf("bot")){
-    speak(r2d2);
-  }*/
-
   // Wait for it to finish speaking
   while(digitalRead(SPK)) {
     delay(300);
